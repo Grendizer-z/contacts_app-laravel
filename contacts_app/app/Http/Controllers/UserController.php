@@ -17,6 +17,12 @@ class UserController extends Controller
         return view('users.index', compact('users')); // Retorna la vista con los datos
     }
 
+    public function registrar($nombre, $email, $clave, $fecha){
+        $query="INSERT INTO usuarios (nombre, email, clave, fecha_creacion) VALUES (?, ?, ?, ?)";
+        $stmt=$this->connection->prepare($query);
+        return $stmt->execute([$nombre, $email, $clave, $fecha]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

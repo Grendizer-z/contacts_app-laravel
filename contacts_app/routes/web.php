@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
 
-Route::get('/', [UserController::class, 'login'])->name('login'); 
+Route::get('/', [SesionController::class, 'create'])->name('login'); 
 
 Route::post('/login', [UserController::class, 'login'])->name('login.post'); 
 
@@ -26,3 +26,14 @@ Route::middleware(['auth'])->group(function () {
         'destroy' => 'contacts.destroy'
     ])->except(['show']); 
 });
+
+// Rutas de Registro
+Route::get('/registro', [RegistroController::class, 'create'])->name('register');
+Route::post('/registro', [RegistroController::class, 'store']);
+
+// Rutas de Sesión/Login
+Route::post('/login', [SesionController::class, 'store']);
+Route::post('/logout', [SesionController::class, 'destroy'])->name('logout');
+
+// Rutas de Contactos (CRUD completo)
+Route::resource('contactos', ContactoController::class)->middleware('auth');
