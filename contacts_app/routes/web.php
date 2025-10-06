@@ -3,8 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\SessionController;
 
-Route::get('/', [SesionController::class, 'create'])->name('login'); 
+Route::get('/', [SessionController::class, 'showLoginForm'])->name('login'); 
 
 Route::post('/login', [UserController::class, 'login'])->name('login.post'); 
 

@@ -6,10 +6,16 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
-class SesionController extends Controller
+class SessionController extends Controller
 {
+    public function showLoginForm()
+    {
+        return view('index');
+    }
+
     public function login(Request $request)
     {
+        //view('index');
         $credentials = $request->validate([
             'email' => 'required|email',
             'clave' => 'required', 
