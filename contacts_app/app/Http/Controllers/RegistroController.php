@@ -15,13 +15,13 @@ class RegistroController extends Controller
             'clave' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = User::create([
-            'nombre' => $request->nombre,
-            'email' => $request->email,
-            'clave' => Hash::make($request->clave), 
-            'fecha_creacion' => now(), 
-        ]);
+        $user =new User();
+        $usuario->nombre=$request->nombre;
+        $usuario->email=$request->email;
+        $usuario->clave=bcrypt($request->clave);
+        $usuario->fecha_creacion=now();
+        $usuario->save();
         
-        return redirect('/')->with('success', 'Registro completado con éxito!');
+        //return redirect('/')->with('success', 'Registro completado con éxito!');
     }
 }

@@ -14,13 +14,15 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all(); // Utiliza el modelo User para obtener los datos
-        return view('users.index', compact('users')); // Retorna la vista con los datos
+        return view('registrar'); // Retorna la vista con los datos
     }
 
-    public function registrar($nombre, $email, $clave, $fecha){
-        $query="INSERT INTO usuarios (nombre, email, clave, fecha_creacion) VALUES (?, ?, ?, ?)";
-        $stmt=$this->connection->prepare($query);
-        return $stmt->execute([$nombre, $email, $clave, $fecha]);
+    public function registrar($request){
+        $usuario=new User();
+        $usuario->nombre=$request->nombre;
+        $usuario->email=$request->email;
+        $usuario->clave=bcrypt($request->clave);
+        $usuario->save();
     }
 
     /**
