@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
-class SessionController extends Controller
+class SesionController extends Controller
 {
     public function showLoginForm()
     {
@@ -21,10 +21,10 @@ class SessionController extends Controller
             'clave' => 'required', 
         ]);
 
-        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['clave']])) {
+        if (Auth::attempt(['email' => $credentials['email'], 'clave' => $credentials['clave']])) {
             $request->session()->regenerate(); 
 
-            return redirect()->intended('dashboard'); 
+            return redirect('/contacts'); 
         }
 
         return back()->withErrors([
