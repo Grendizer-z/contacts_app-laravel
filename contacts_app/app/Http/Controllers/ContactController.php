@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Contact;
 
 class ContactController extends Controller
 {
@@ -11,7 +13,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        view('contacts');
+        $contactos = Auth::user()->contactos;
+        return view('contacts', compact('contactos'));
+
     }
 
     /**
@@ -19,7 +23,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return view('contacts.create');
     }
 
     /**
@@ -27,8 +31,22 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'phone' => 'nullable|string',
+            'email' => 'required|email|unique:contacts,email',
+        ]);
+
+        Contact::create([
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('contacts')->with('success', 'Contacto creado correctamente.');
     }
+
 
     /**
      * Display the specified resource.
@@ -43,7 +61,8 @@ class ContactController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $contacto = Contact::findOrFail($id);
+        return view('contacts.edit', compact('contacto'));
     }
 
     /**
@@ -51,7 +70,9 @@ class ContactController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $contacto = Contact::findOrFail($id);
+        $contacto->update($request->only(['name', 'phone', 'email']));
+        return redirect()->route('contacts')->with('success', 'Contacto actualizado');
     }
 
     /**
@@ -59,6 +80,8 @@ class ContactController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $contacto = Contact::findOrFail($id);
+        $contacto->delete();
+        return redirect()->route('contacts')->with('success', 'Contacto eliminado');
     }
 }

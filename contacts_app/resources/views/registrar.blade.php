@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <form action="{{ route('registrar.post') }}" method="POST">
+        <form action="{{ route('registrar') }}" method="POST">
             @csrf
             <input type="text" placeholder="Nombre" name="nombre">
             <input type="email" placeholder="Email" name="email">

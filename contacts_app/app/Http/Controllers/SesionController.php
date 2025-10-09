@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
 class SesionController extends Controller
 {
     public function showLoginForm()
@@ -15,22 +18,26 @@ class SesionController extends Controller
 
     public function login(Request $request)
     {
-        //view('index');
         $credentials = $request->validate([
             'email' => 'required|email',
-            'clave' => 'required', 
+            'clave' => 'required',
         ]);
 
-        if (Auth::attempt(['email' => $credentials['email'], 'clave' => $credentials['clave']])) {
-            $request->session()->regenerate(); 
+        $user = User::where('email', $credentials['email'])->first();
 
-            return redirect('/contacts'); 
+        if ($user && Hash::check($credentials['clave'], $user->clave)) {
+            Auth::login($user);
+            $request->session()->regenerate();
+
+            return redirect('/contacts');
         }
 
         return back()->withErrors([
             'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
         ])->onlyInput('email');
     }
+
+
 
     public function logout(Request $request)
     {

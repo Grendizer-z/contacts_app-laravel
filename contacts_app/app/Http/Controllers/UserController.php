@@ -17,12 +17,14 @@ class UserController extends Controller
         return view('registrar'); // Retorna la vista con los datos
     }
 
-    public function registrar($request){
+    public function registrar(Request $request){
         $usuario=new User();
         $usuario->nombre=$request->nombre;
         $usuario->email=$request->email;
         $usuario->clave=bcrypt($request->clave);
+        $usuario->fecha_creacion=now();
         $usuario->save();
+        return redirect()->back()->with('success', 'Usuario registrado correctamente');
     }
 
     /**
